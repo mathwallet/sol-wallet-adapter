@@ -3,10 +3,9 @@ import { PublicKey } from '@solana/web3.js';
 import bs58 from 'bs58';
 
 export default class Wallet extends EventEmitter {
-  constructor(provider, network) {
+  constructor(providerUrl, network) {
     super();
-    this._providerName = provider.name;
-    this._providerUrl = new URL(provider.url);
+    this._providerUrl = new URL(providerUrl);
     this._providerUrl.hash = new URLSearchParams({
       origin: window.location.origin,
       network,
@@ -22,7 +21,8 @@ export default class Wallet extends EventEmitter {
   _validSolanaInjecter = () => {
     return (
       window.solana &&
-      window.solana[this._providerName]
+      window.solana.providerUrl &&
+      window.solana.providerUrl.origin === this._providerUrl.origin
     );
   };
 
